@@ -26,6 +26,12 @@ if (!class_exists('MSDChapterCPT')) {
 			add_action('admin_print_styles', array(&$this,'add_admin_styles') );
 			// important: note the priority of 99, the js needs to be placed after tinymce loads
 			add_action('admin_print_footer_scripts',array(&$this,'print_footer_scripts'),99);
+            
+            add_action('genesis_entry_header',array(&$this,'remove_post_meta'));
+            add_filter( 'genesis_cpt_archive_intro_text_output', 'do_shortcode' );
+            
+            add_shortcode('book-menu',array(&$this,'book_menu_shortcode_handler'));
+            
 		}
 		
 		
@@ -133,6 +139,25 @@ if (!class_exists('MSDChapterCPT')) {
 			}
 		}
 		
-            
+        function remove_post_meta(){
+            global $post;
+            if($post->post_type == $this->cpt){
+               remove_action('genesis_entry_header','genesis_post_info',12);
+            }
+        }   
+        
+        function book_menu_shortcode_handler($atts){
+            $args = array(
+                'posts_per_page'   => -1,
+                'orderby'          => 'date',
+                'order'            => 'DESC',
+                'post_type'        => $this->cpt,
+            );
+            $posts_array = get_posts( $args );
+            foreach($posts_array AS $p){
+                $ret .= '<li class="menu-item"><a href="'.get_the_permalink($p->ID).'">'.get_the_title($p->ID).'</a></li>';
+            }
+            return $ret;
+        }
   } //End Class
 } //End if class exists statement
