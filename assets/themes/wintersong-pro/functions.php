@@ -147,3 +147,23 @@ function wintersong_custom_footer( $output ) {
 	return $output;
 
 }
+register_nav_menus( array(
+    'blog_menu' => 'Appalachian Trail Menu'
+) );
+add_action('genesis_before_entry','msdlab_custom_blog_menu');
+function msdlab_custom_blog_menu(){
+    global $post;
+    if($post->post_type == 'post'){
+        if(has_nav_menu('blog_menu')){
+            $blog_menu = wp_nav_menu( array( 'theme_location' => 'blog_menu','container_class' => 'blog-menu','echo' => FALSE ) );
+            print $blog_menu;
+        }
+    }
+}
+
+add_action('pre_get_posts','msdlab_alter_post_order');
+function msdlab_alter_post_order($query){
+    if( $query->is_main_query() ) {
+        $query->set( 'order', 'ASC' );
+    }
+}
