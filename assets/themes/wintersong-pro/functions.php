@@ -167,3 +167,9 @@ function msdlab_alter_post_order($query){
         $query->set( 'order', 'ASC' );
     }
 }
+
+add_filter('genesis_prev_link_text','msdlab_link_text');
+add_filter('genesis_next_link_text','msdlab_link_text');
+function msdlab_link_text($text){
+    return 'Read More';
+}
