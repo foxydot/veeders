@@ -168,8 +168,11 @@ function msdlab_alter_post_order($query){
     }
 }
 
-add_filter('genesis_prev_link_text','msdlab_link_text');
-add_filter('genesis_next_link_text','msdlab_link_text');
-function msdlab_link_text($text){
+add_filter('genesis_prev_link_text','msdlab_prev_link_text');
+function msdlab_prev_link_text($text){
+    return 'Previous';
+}
+add_filter('genesis_next_link_text','msdlab_next_link_text');
+function msdlab_next_link_text($text){
     return 'Read More';
 }
